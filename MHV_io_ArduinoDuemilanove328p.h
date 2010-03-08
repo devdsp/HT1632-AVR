@@ -1,0 +1,29 @@
+/*
+ * MHV_io_ArduinoDuemilanove328p.h
+ *
+ *  Created on: 21/02/2010
+ *      Author: deece
+ */
+
+#ifndef MHV_IO_ARDUINO_DUIMILANOVE_328P_H_
+#define MHV_IO_ARDUINO_DUIMILANOVE_328P_H_
+
+#include <avr/io.h>
+
+#define MHV_ARDUINO_PIN_0	&DDRD,	&PORTD,	&PIND,	0	//USART0_RX
+#define MHV_ARDUINO_PIN_1	&DDRD,	&PORTD,	&PIND,	1	//USART0_TX
+#define MHV_ARDUINO_PIN_2	&DDRD,	&PORTD,	&PIND,	2
+#define MHV_ARDUINO_PIN_3	&DDRD,	&PORTD,	&PIND,	3 	//PWM
+#define MHV_ARDUINO_PIN_4	&DDRD,	&PORTD,	&PIND,	4
+#define MHV_ARDUINO_PIN_5	&DDRD,	&PORTD,	&PIND,	5 	//PWM
+#define MHV_ARDUINO_PIN_6	&DDRD,	&PORTD,	&PIND,	6 	//PWM
+#define MHV_ARDUINO_PIN_7	&DDRD,	&PORTD,	&PIND,	7
+
+#define MHV_ARDUINO_PIN_8	&DDRB,	&PORTB,	&PINB,	0
+#define MHV_ARDUINO_PIN_9	&DDRB,	&PORTB,	&PINB,	1 	//PWM
+#define MHV_ARDUINO_PIN_10	&DDRB,	&PORTB,	&PINB,	2 	//PWM
+#define MHV_ARDUINO_PIN_11	&DDRB,	&PORTB,	&PINB,	3 	//PWM
+#define MHV_ARDUINO_PIN_12	&DDRB,	&PORTB,	&PINB,	4
+#define MHV_ARDUINO_PIN_13	&DDRB,	&PORTB,	&PINB,	5
+
+#endif
