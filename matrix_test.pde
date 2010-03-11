@@ -54,6 +54,9 @@ void setup ()
 
 void loop ()
 {
+  char *c = string;
+  uint8_t char_col = 0;
+  
   for( byte col = 0; col < max_cols+1; ++col ) {
     switch(col) {
       case 0:
@@ -70,29 +73,36 @@ void loop ()
     if( cur_mat ) {      
       if( 
         (col - starting_col) < 0 || 
-        (col - starting_col) > strlen(string)*6 ||
-        (col - starting_col) % 6 == 0
+        *c == '\0'
       ) {
         cur_mat->send_data(0);
         cur_mat->send_data(0);
       } else {
-        byte char_index = (int)((col - starting_col) / 6);
-        byte char_col = (col - starting_col) %6-1;
-        char c = string[char_index];
-        if (c >= 'A' && c <= 'Z' ||
-          (c >= 'a' && c <= 'z') ) {
-          c &= 0x1F;   // A-Z maps to 1-26
-        } 
-        else if (c >= '0' && c <= '9') {
-          c = (c - '0') + 27;
-        } 
-        else if (c == ' ') {
-          c = 0; // space
+        if( char_col == 5 ) {
+          c++;
+          char_col = 0;
+          cur_mat->send_data(0);
+          cur_mat->send_data(0);
+        } else {
+          
+          if (*c >= 'A' && *c <= 'Z' ||
+            (*c >= 'a' && *c <= 'z') ) {
+            *c &= 0x1F;   // A-Z maps to 1-26
+          } 
+          else if (*c >= '0' && *c <= '9') {
+            *c = (*c - '0') + 27;
+          } 
+          else if (*c == ' ') {
+            *c = 0; // space
+          }
+    
+          byte dots = revbits(pgm_read_byte_near(&myfont[*c][char_col]));
+          cur_mat->send_data(dots);
+          cur_mat->send_data(dots>>4);
+          
+          char_col++;
+          
         }
-  
-        byte dots = revbits(pgm_read_byte_near(&myfont[c][char_col]));
-        cur_mat->send_data(dots);
-        cur_mat->send_data(dots>>4);
       }
     }
   }
