@@ -56,15 +56,19 @@ void setup ()
 
 void loop ()
 {
-  if( col_offset < 0 ) {
-    uint8_t char_index;      
-    if( *first_char > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *first_char < DEDP105_FONT_FIRST_CHAR ) {
-      char_index = DEDP105_FONT_CHAR_UNKNOWN;
-    } else {
-      char_index = *first_char - DEDP105_FONT_FIRST_CHAR;
-    }
+  uint8_t char_index, char_width;      
+  uint16_t char_offset;
+  uint8_t first_char_width;
+
+  if( *first_char > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *first_char < DEDP105_FONT_FIRST_CHAR ) {
+    char_index = DEDP105_FONT_CHAR_UNKNOWN;
+  } else {
+    char_index = *first_char - DEDP105_FONT_FIRST_CHAR;
+  }
          
-    uint8_t first_char_width = pgm_read_byte( &dedp105_font_widths[char_index] );
+  first_char_width = pgm_read_byte( &dedp105_font_widths[char_index] );
+  
+  if( col_offset < 0 ) {
     if( ++first_char_col > first_char_width ) {
       first_char_col = 0;
     
@@ -72,11 +76,21 @@ void loop ()
         first_char = string;
         col_offset = max_cols;
       }
+      if( *first_char > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *first_char < DEDP105_FONT_FIRST_CHAR ) {
+        char_index = DEDP105_FONT_CHAR_UNKNOWN;
+      } else {
+        char_index = *first_char - DEDP105_FONT_FIRST_CHAR;
+      }
+         
+      first_char_width = pgm_read_byte( &dedp105_font_widths[char_index] );
     }
   }
   cptr = first_char;
   char_col = first_char_col;
-
+  char_width = first_char_width;
+  char_offset = pgm_read_word(&dedp105_font_offsets[char_index]);
+  
+  
   uint8_t pixels;
   
   for( byte col = 0; col < max_cols+1; ++col ) {
@@ -95,17 +109,6 @@ void loop ()
     if( cur_mat ) {
       pixels = 0;
       if( col_offset < col && *cptr != '\0' ) {
-        uint8_t char_index, char_width;
-        uint16_t char_offset;
-        
-        if( *cptr > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *cptr < DEDP105_FONT_FIRST_CHAR ) {
-          char_index = DEDP105_FONT_CHAR_UNKNOWN;
-        } else {
-          char_index = *cptr - DEDP105_FONT_FIRST_CHAR;
-        }
-
-        char_offset = pgm_read_word(&dedp105_font_offsets[char_index]);
-        char_width = pgm_read_byte(&dedp105_font_widths[char_index]);
         
         if( char_col < char_width ) {
           pixels = pgm_read_byte(&dedp105_font[(int)(char_offset + char_col)]);
@@ -116,6 +119,14 @@ void loop ()
         if( char_col > char_width ) {
           char_col = 0;
           cptr++;
+          if( *cptr > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *cptr < DEDP105_FONT_FIRST_CHAR ) {
+            char_index = DEDP105_FONT_CHAR_UNKNOWN;
+          } else {
+            char_index = *cptr - DEDP105_FONT_FIRST_CHAR;
+          }
+  
+          char_width = pgm_read_byte(&dedp105_font_widths[char_index]);
+          char_offset = pgm_read_word(&dedp105_font_offsets[char_index]);
         }
       }
       cur_mat->send_data(pixels);
