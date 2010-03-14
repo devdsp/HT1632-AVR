@@ -7,7 +7,7 @@ HT1632::HT1632(
   volatile uint8_t *rclk_dir, volatile uint8_t *rclk_output_reg, volatile uint8_t *rclk_input_reg, uint8_t rclk_pin, 
   volatile uint8_t *data_dir, volatile uint8_t *data_output_reg, volatile uint8_t *data_input_reg, uint8_t data_pin,
   Command commons, 
-  boolean master 
+  bool master 
 ) {
   this->cs_dir = cs_dir;
   this->cs_output_reg = cs_output_reg;
@@ -66,7 +66,7 @@ HT1632::HT1632(
   
   set_mode( HT1632::write_mode );
   send_address( 0 );
-  for( byte i =0; i < 0x5E; ++i ) {
+  for( uint8_t i =0; i < 0x5E; ++i ) {
     send_data( 0x00 );
   }
   deselect();
@@ -75,11 +75,11 @@ HT1632::HT1632(
 void HT1632::set_mode(Mode mode) {
   deselect();
   select();
-  write_bits_msb( _BV(2), (byte)mode );
+  write_bits_msb( _BV(2), (uint8_t)mode );
   this->mode = mode;
 }
 
-void HT1632::write_bits_msb( byte startingbit, byte value ) { 
+void HT1632::write_bits_msb( uint8_t startingbit, uint8_t value ) { 
   mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
   while (startingbit) {
     mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
@@ -93,10 +93,10 @@ void HT1632::write_bits_msb( byte startingbit, byte value ) {
   }
 }  
 
-void HT1632::write_bits_lsb( byte finishingbit, byte value ) {    
+void HT1632::write_bits_lsb( uint8_t finishingbit, uint8_t value ) {    
   finishingbit <<=1;
   mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
-  byte i = _BV(0);
+  uint8_t i = _BV(0);
   while (finishingbit != i) {
     mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
     if( value & i ) {
@@ -109,21 +109,21 @@ void HT1632::write_bits_lsb( byte finishingbit, byte value ) {
   }
 }
 
-void HT1632::send_address( byte addr ) {
+void HT1632::send_address( uint8_t addr ) {
   write_bits_msb( _BV(6), addr );
 }
 
-void HT1632::send_data( byte data ) { // only sends bottom nibble
+void HT1632::send_data( uint8_t data ) { // only sends bottom nibble
   write_bits_lsb( _BV(3), data );
 }
 
 void HT1632::send_command( Command command ) {
-  write_bits_msb( _BV(7), (byte)command );
+  write_bits_msb( _BV(7), (uint8_t)command );
   write_bits_msb( _BV(0), 0 );
 }
 
-byte HT1632::read_bits_lsb() {
-  byte buffer(0);
+uint8_t HT1632::read_bits_lsb() {
+  uint8_t buffer(0);
   mhv_setInput(data_dir,data_output_reg,data_intput_reg,data_pin);
   for( int i = 1; i < _BV(4); i<<=1 ) {
     mhv_pinOff(rclk_dir,rclk_output_reg,rclk_input_reg,rclk_pin);
@@ -135,7 +135,7 @@ byte HT1632::read_bits_lsb() {
   return buffer;
 }
 
-byte HT1632::read_nibble() {
+uint8_t HT1632::read_nibble() {
   return read_bits_lsb();
 }
 
@@ -147,7 +147,7 @@ void HT1632::select() {
   mhv_pinOff(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
 }
 
-boolean HT1632::map_coordinate( byte x, byte y, byte &addr, byte &bitmask ) {
+bool HT1632::map_coordinate( uint8_t x, uint8_t y, uint8_t &addr, uint8_t &bitmask ) {
   if( x < 0 || y < 0 || x > maxx, y > maxy )
     return false;
   
@@ -163,7 +163,7 @@ boolean HT1632::map_coordinate( byte x, byte y, byte &addr, byte &bitmask ) {
   return true;  
 }
 
-void HT1632::set_max_coordinates( byte x, byte y ) {
+void HT1632::set_max_coordinates( uint8_t x, uint8_t y ) {
   maxx = x;
   maxy = y;
 }
