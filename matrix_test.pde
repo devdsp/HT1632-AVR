@@ -31,16 +31,18 @@ uint8_t revbits(uint8_t arg) {
 
 HT1632 *matrix[4];
 
-int max_cols = 127;
-int starting_col = max_cols; 
+uint8_t max_cols = 127;
+int16_t col_offset = max_cols;
+
 HT1632 *cur_mat = 0;
-char *string = "thank you for visiting makehackvoid. have a safe and productive day.";
-  
+char *string = "Welcome to Make, Hack, Void. Have a safe and productive day.";
+char *first_char = string;
+uint8_t first_char_col = 0;
+char *cptr = first_char;
+uint8_t char_col = first_char_col;
+
 void setup ()
-{
-  Serial.begin(115200);
-  randomSeed(analogRead(0));
-  
+{  
   digitalWrite(4,HIGH);
   digitalWrite(5,HIGH);
   digitalWrite(6,HIGH);
@@ -54,15 +56,35 @@ void setup ()
 
 void loop ()
 {
-  char *c = string;
-  uint8_t char_col = 0;
+  if( col_offset < 0 ) {
+    uint8_t char_index;      
+    if( *first_char > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *first_char < DEDP105_FONT_FIRST_CHAR ) {
+      char_index = DEDP105_FONT_CHAR_UNKNOWN;
+    } else {
+      char_index = *first_char - DEDP105_FONT_FIRST_CHAR;
+    }
+         
+    uint8_t first_char_width = pgm_read_byte( &dedp105_font_widths[char_index] );
+    if( ++first_char_col > first_char_width ) {
+      first_char_col = 0;
+    
+      if( *(++first_char) == '\0' ) {
+        first_char = string;
+        col_offset = max_cols;
+      }
+    }
+  }
+  cptr = first_char;
+  char_col = first_char_col;
+
+  uint8_t pixels;
   
   for( byte col = 0; col < max_cols+1; ++col ) {
     switch(col) {
       case 0:
-      case 32: 
-      case 64: 
-      case 96: 
+      case 32:
+      case 64:
+      case 96:
         if( cur_mat )
           cur_mat->deselect();
         cur_mat = matrix[(int)(col/32)];
@@ -70,44 +92,35 @@ void loop ()
         cur_mat->send_address( 0 );
       break;
     }
-    if( cur_mat ) {      
-      if( 
-        (col - starting_col) < 0 || 
-        *c == '\0'
-      ) {
-        cur_mat->send_data(0);
-        cur_mat->send_data(0);
-      } else {
-        if( char_col == 5 ) {
-          c++;
-          char_col = 0;
-          cur_mat->send_data(0);
-          cur_mat->send_data(0);
+    if( cur_mat ) {
+      pixels = 0;
+      if( col_offset < col && *cptr != '\0' ) {
+        uint8_t char_index, char_width;
+        uint16_t char_offset;
+        
+        if( *cptr > DEDP105_FONT_FIRST_CHAR + DEDP105_FONT_CHAR_COUNT || *cptr < DEDP105_FONT_FIRST_CHAR ) {
+          char_index = DEDP105_FONT_CHAR_UNKNOWN;
         } else {
-          
-          if (*c >= 'A' && *c <= 'Z' ||
-            (*c >= 'a' && *c <= 'z') ) {
-            *c &= 0x1F;   // A-Z maps to 1-26
-          } 
-          else if (*c >= '0' && *c <= '9') {
-            *c = (*c - '0') + 27;
-          } 
-          else if (*c == ' ') {
-            *c = 0; // space
-          }
-    
-          byte dots = revbits(pgm_read_byte_near(&myfont[*c][char_col]));
-          cur_mat->send_data(dots);
-          cur_mat->send_data(dots>>4);
-          
-          char_col++;
-          
+          char_index = *cptr - DEDP105_FONT_FIRST_CHAR;
+        }
+
+        char_offset = pgm_read_word(&dedp105_font_offsets[char_index]);
+        char_width = pgm_read_byte(&dedp105_font_widths[char_index]);
+        
+        if( char_col < char_width ) {
+          pixels = pgm_read_byte(&dedp105_font[(int)(char_offset + char_col)]);
+        }
+  
+        ++char_col;
+  
+        if( char_col > char_width ) {
+          char_col = 0;
+          cptr++;
         }
       }
+      cur_mat->send_data(pixels);
+      cur_mat->send_data(pixels>>4);
     }
   }
-  --starting_col;
-  if( starting_col <-(signed int)(strlen(string)*6) ){
-    starting_col = max_cols;
-  }
+  col_offset--;
 }
