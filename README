@@ -1,0 +1,16 @@
+This project contains code to interact with LED matrix displays containing
+the Holtek HT1632 LED Driver IC from AVR microcontrollers. Sure Electronics is 
+a great source of these displays. They make 8x32 and 16x24 displays, both of
+which can be found on ebay in both red and green monocolour displays.
+
+This code has been built in the Arduino environment and has some Arduino
+idioms. I have tried to remove as much of the Arduino dependancies from the
+core library as possible but I'm yet to write test code outside of the Arduino
+environment so can't claim that it works.
+
+The driver class supports all three modes and should handle both 8x32 and
+16x24 display layouts. As I only have 8x32 displays I can only test on them.
+
+See the example Arduino sketch for an example of streaming columns of data to
+the displays. I'll be fleshing out examples as my time permits.
+
