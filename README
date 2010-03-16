@@ -1,10 +1,10 @@
-This project contains code to interact with LED matrix displays containing
-the Holtek HT1632 LED Driver IC from AVR microcontrollers. Sure Electronics is 
+This project contains code to interface AVR micro controllers to LED matrix 
+displays containing the Holtek HT1632 LED Driver IC. Sure Electronics is 
 a great source of these displays. They make 8x32 and 16x24 displays, both of
-which can be found on ebay in both red and green monocolour displays.
+which can be found on ebay in either red or green mono colour displays.
 
 This code has been built in the Arduino environment and has some Arduino
-idioms. I have tried to remove as much of the Arduino dependancies from the
+idioms. I have tried to remove as much of the Arduino dependencies from the
 core library as possible but I'm yet to write test code outside of the Arduino
 environment so can't claim that it works.
 
@@ -16,5 +16,5 @@ the displays. I'll be fleshing out examples as my time permits. These examples
 will be released under a more permissive license than the current example.
 
 The MHVlib AVR IO macros and the HT1632 class are both released under LGPL.
-The example sketch is realeased under GPL.
+The example sketch is released under GPL.
 
