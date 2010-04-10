@@ -1,3 +1,5 @@
+Into
+====
 This project contains code to interface AVR micro controllers to LED matrix 
 displays containing the Holtek HT1632 LED Driver IC. Sure Electronics is 
 a great source of these displays. They make 8x32 and 16x24 displays, both of
@@ -8,13 +10,23 @@ idioms. I have tried to remove as much of the Arduino dependencies from the
 core library as possible but I'm yet to write test code outside of the Arduino
 environment so can't claim that it works.
 
-The driver class supports all three modes and should handle both 8x32 and
-16x24 display layouts. As I only have 8x32 displays I can only test on them.
+The driver class supports all three modes (READ, WRITE & READ-MODIFY-WRITE) 
+and should handle both 8x32 and 16x24 display layouts. As I only have 8x32 
+displays I can only test on them.
 
 See the example Arduino sketch for an example of streaming columns of data to
 the displays. I'll be fleshing out examples as my time permits. These examples
 will be released under a more permissive license than the current example.
 
+Usage
+=====
+Copy both subdirectories of the 'libraries/' from this repository into the 
+'libraries' subdirectory of your Arduino environment's 'sketches' directory.
+You should then be able to #include <ht1632.h> in your sketches. To build the
+examples copy them to 'sketches' and open them in the Arduino environment. 
+
+License
+=======
 The MHVlib AVR IO macros and the HT1632 class are both released under LGPL.
 The example sketch is released under GPL.
 

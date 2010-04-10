@@ -15,11 +15,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "ht1632.h"
+#include <ht1632.h>
 #include "font.h"
 #include <stdlib.h> 
 
-#include "MHV_io_ArduinoDuemilanove328p.h"
+#include <MHV_io_ArduinoDuemilanove328p.h>
 
 void * operator new(size_t size); 
 void operator delete(void * ptr); 
