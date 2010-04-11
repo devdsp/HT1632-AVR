@@ -30,7 +30,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #define mhv_setInput(mhvDir,mhvOutput,mhvInput,mhvBit) \
 	{ \
-		*mhvDir |= _BV(mhvBit); \
+		*mhvDir &= ~_BV(mhvBit); \
 		*mhvOutput &= ~_BV(mhvBit); \
 	}
 
