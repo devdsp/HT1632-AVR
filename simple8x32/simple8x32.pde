@@ -27,7 +27,6 @@ void setup ()
   digitalWrite(7,HIGH);
   
   matrix = new HT1632( MHV_ARDUINO_PIN_4,MHV_ARDUINO_PIN_8,MHV_ARDUINO_PIN_10,MHV_ARDUINO_PIN_9, HT1632::pmos_8commons );
-  Serial.begin(115200);
 }
 
 void loop ()
@@ -71,10 +70,7 @@ void loop ()
     matrix->set_mode( HT1632::write_mode );
     matrix->send_address( addr );
     uint8_t bits = matrix->read_nibble();
-    Serial.println( bits, BIN );
     bits ^= 1 << (int) random(4);
-    Serial.println( bits, BIN );
-    Serial.println("");
     matrix->send_data( bits );
     delay(100);
   }
