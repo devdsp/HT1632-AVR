@@ -87,23 +87,12 @@ public:
   void deselect();
   void select();
   
-  bool map_coordinate( uint8_t x, uint8_t y, uint8_t &addr, uint8_t &bitmask );
-  
-  void set_max_coordinates( uint8_t x, uint8_t y );
-  
-  uint8_t get_maxx() {return maxx;}
-  uint8_t get_maxy() {return maxy;}
-  
-protected:  
-  
-
 private:
   volatile uint8_t *cs_dir,   *cs_output_reg,   *cs_input_reg;   uint8_t cs_pin;
   volatile uint8_t *wclk_dir, *wclk_output_reg, *wclk_input_reg; uint8_t wclk_pin;
   volatile uint8_t *rclk_dir, *rclk_output_reg, *rclk_input_reg; uint8_t rclk_pin;
   volatile uint8_t *data_dir, *data_output_reg, *data_input_reg; uint8_t data_pin;
   
-  uint8_t maxx, maxy;
   Command commons;
   Mode mode;
   

@@ -63,14 +63,6 @@ HT1632::HT1632(
   send_command(disable_system_oscillator);
   send_command((Command)commons);
   
-  if( commons == nmos_8commons || commons == pmos_8commons ) {
-    maxx = 31;
-    maxy = 7;
-  } else {
-    maxx = 23;
-    maxy = 15;
-  }
-  
   if( master ) {
     send_command(master_mode);
   } else {
@@ -163,26 +155,5 @@ void HT1632::deselect() {
 
 void HT1632::select() {
   mhv_pinOff(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
-}
-
-bool HT1632::map_coordinate( uint8_t x, uint8_t y, uint8_t &addr, uint8_t &bitmask ) {
-  if( x < 0 || y < 0 || x > maxx, y > maxy )
-    return false;
-  
-  if( commons == nmos_8commons || commons == pmos_8commons ) {
-    addr = (x<<1) + (y>>2);
-    bitmask = _BV( y );
-    if( y  > 3 )
-      bitmask >>= 4;
-  } else {
-    addr = (x<<2) + (y>>2);
-    bitmask = 8>>(y&3);
-  }
-  return true;  
-}
-
-void HT1632::set_max_coordinates( uint8_t x, uint8_t y ) {
-  maxx = x;
-  maxy = y;
 }
 
