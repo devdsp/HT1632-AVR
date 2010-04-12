@@ -77,7 +77,10 @@ public:
     Command commons, 
     bool master = true 
   );
-  
+
+  bool write_to_address( uint8_t addr, uint8_t value );
+  bool read_from_address( uint8_t addr, uint8_t *value );  
+
   void set_mode(Mode mode);
   void send_address( uint8_t addr );
   void send_data( uint8_t data );
