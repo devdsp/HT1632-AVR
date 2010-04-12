@@ -52,14 +52,10 @@ void loop ()
   // chase a single LED by overwriting memory pages
   for( int i = 0; i < 0x40; ++i ) {
     for( int j = _BV(0); j < _BV(4); j<<=1 ) {
-      matrix->set_mode( HT1632::write_mode );
-      matrix->send_address( i );
-      matrix->send_data( j );
+      matrix->write_to_address( i, j );
       delay(25);
     }
-    matrix->set_mode( HT1632::write_mode );
-    matrix->send_address( i );
-    matrix->send_data( 0 );
+    matrix->write_to_address( i, 0 );
   }
   
   delay(1000);
