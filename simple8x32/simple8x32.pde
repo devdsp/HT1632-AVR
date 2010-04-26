@@ -34,7 +34,7 @@ void loop ()
   // fill the display using consecutive writes
   matrix->set_mode( HT1632::write_mode );
   matrix->send_address( 0 );
-  for( int i = 0; i < 0x40; ++i ) {
+  for( int i = 0; i < matrix->memory_limit(); ++i ) {
     matrix->send_data(0xF);
   }
     
@@ -43,14 +43,14 @@ void loop ()
   //blank the display using consecurtive writes
   matrix->set_mode( HT1632::write_mode );
   matrix->send_address( 0 );
-  for( int i = 0; i < 0x40; ++i ) {
+  for( int i = 0; i < matrix->memory_limit(); ++i ) {
     matrix->send_data(0x0);
   }
     
   delay(1000);
 
   // chase a single LED by overwriting memory pages
-  for( int i = 0; i < 0x40; ++i ) {
+  for( int i = 0; i < matrix->memory_limit(); ++i ) {
     for( int j = _BV(0); j < _BV(4); j<<=1 ) {
       matrix->write_to_address( i, j );
       delay(25);
@@ -61,8 +61,8 @@ void loop ()
   delay(1000);
  
   // randomly toggle bits
-  for( int i = 0; i < 0x40; ++i ) {
-    int addr = (int)random(0x40);
+  for( int i = 0; i < matrix->memory_limit(); ++i ) {
+    int addr = (int)random(matrix->memory_limit());
     matrix->set_mode( HT1632::write_mode );
     matrix->send_address( addr );
     uint8_t bits = matrix->read_nibble();
