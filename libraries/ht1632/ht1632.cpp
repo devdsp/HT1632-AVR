@@ -50,14 +50,14 @@ HT1632::HT1632(
   this->commons = commons;
   this->mode = no_mode;
   
-  mhv_setOutput(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
-  mhv_setOutput(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
-  mhv_setOutput(rclk_dir,rclk_output_reg,rclk_intput_reg,rclk_pin);
-  mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
+  _mhv_setOutput(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
+  _mhv_setOutput(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+  _mhv_setOutput(rclk_dir,rclk_output_reg,rclk_intput_reg,rclk_pin);
+  _mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
   
-  mhv_pinOn(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
-  mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
-  mhv_pinOn(rclk_dir,rclk_output_reg,rclk_intput_reg,rclk_pin);
+  _mhv_pinOn(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
+  _mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+  _mhv_pinOn(rclk_dir,rclk_output_reg,rclk_intput_reg,rclk_pin);
   
   set_mode( command_mode );
   send_command(disable_system_oscillator);
@@ -90,31 +90,31 @@ void HT1632::set_mode(Mode mode) {
 }
 
 void HT1632::write_bits_msb( uint8_t startingbit, uint8_t value ) { 
-  mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
+  _mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
   while (startingbit) {
-    mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+    _mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
     if( value & startingbit ) {
-      mhv_pinOn(data_dir,data_output_reg,data_intput_reg,data_pin);
+      _mhv_pinOn(data_dir,data_output_reg,data_intput_reg,data_pin);
     } else {
-      mhv_pinOff(data_dir,data_output_reg,data_intput_reg,data_pin);
+      _mhv_pinOff(data_dir,data_output_reg,data_intput_reg,data_pin);
     }
-    mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+    _mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
     startingbit >>= 1;
   }
 }  
 
 void HT1632::write_bits_lsb( uint8_t finishingbit, uint8_t value ) {    
   finishingbit <<=1;
-  mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
+  _mhv_setOutput(data_dir,data_output_reg,data_intput_reg,data_pin);
   uint8_t i = _BV(0);
   while (finishingbit != i) {
-    mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+    _mhv_pinOff(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
     if( value & i ) {
-      mhv_pinOn(data_dir,data_output_reg,data_intput_reg,data_pin);
+      _mhv_pinOn(data_dir,data_output_reg,data_intput_reg,data_pin);
     } else {
-      mhv_pinOff(data_dir,data_output_reg,data_intput_reg,data_pin);
+      _mhv_pinOff(data_dir,data_output_reg,data_intput_reg,data_pin);
     }
-    mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
+    _mhv_pinOn(wclk_dir,wclk_output_reg,wclk_intput_reg,wclk_pin);
     i <<= 1;
   }
 }
@@ -166,13 +166,13 @@ void HT1632::send_command( Command command ) {
 
 uint8_t HT1632::read_bits_lsb() {
   uint8_t buffer(0);
-  mhv_setInput(data_dir,data_output_reg,data_intput_reg,data_pin);
+  _mhv_setInput(data_dir,data_output_reg,data_intput_reg,data_pin);
   for( int i = 1; i < _BV(4); i<<=1 ) {
-    mhv_pinOff(rclk_dir,rclk_output_reg,rclk_input_reg,rclk_pin);
-    if( mhv_pinRead(data_dir,data_output_reg,data_input_reg,data_pin) ) {
+    _mhv_pinOff(rclk_dir,rclk_output_reg,rclk_input_reg,rclk_pin);
+    if( _mhv_pinRead(data_dir,data_output_reg,data_input_reg,data_pin) ) {
       buffer |= i;
     }
-    mhv_pinOn(rclk_dir,rclk_output_reg,rclk_input_reg,rclk_pin);
+    _mhv_pinOn(rclk_dir,rclk_output_reg,rclk_input_reg,rclk_pin);
   }
   return buffer;
 }
@@ -182,10 +182,10 @@ uint8_t HT1632::read_nibble() {
 }
 
 void HT1632::deselect() {
-  mhv_pinOn(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
+  _mhv_pinOn(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
 }
 
 void HT1632::select() {
-  mhv_pinOff(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
+  _mhv_pinOff(cs_dir,cs_output_reg,cs_intput_reg,cs_pin);
 }
 
