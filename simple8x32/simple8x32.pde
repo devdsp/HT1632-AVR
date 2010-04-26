@@ -70,4 +70,24 @@ void loop ()
     matrix->send_data( bits );
     delay(100);
   }
+ 
+  { // turn everything off using a 32 byte buffer
+    uint8_t buffer[32] = {
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0
+    };
+    matrix->write_buffer( buffer, 32 );
+  }
+  
+  { // draw a this 8 byte test pattern twice at different memory offsets
+    uint8_t buffer[8] = {
+        (uint8_t)0x00, (uint8_t)0x0F, (uint8_t)0xF0, (uint8_t)0xFF,
+        (uint8_t)0x55, (uint8_t)0x5F, (uint8_t)0xF5, (uint8_t)0xFF,
+    };
+    matrix->write_buffer( buffer, 8 );
+    matrix->write_buffer( buffer, 8, 24 );
+    delay(1000);
+  }
 }
