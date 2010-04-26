@@ -162,6 +162,8 @@ bool HT1632::write_buffer( uint8_t *buffer, uint8_t length, uint8_t offset ) {
     send_data( temp );
     ++pointer; 
   }
+  deselect();
+  return true;
 }
 
 bool HT1632::read_buffer( uint8_t *buffer, uint8_t length, uint8_t offset ) {
@@ -181,6 +183,8 @@ bool HT1632::read_buffer( uint8_t *buffer, uint8_t length, uint8_t offset ) {
     *pointer = temp;
     ++pointer; 
   }
+  deselect();
+  return true;
 }
 
 void HT1632::send_address( uint8_t addr ) {
