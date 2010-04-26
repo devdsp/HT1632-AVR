@@ -119,15 +119,15 @@ void HT1632::write_bits_lsb( uint8_t finishingbit, uint8_t value ) {
   }
 }
 
+uint8_t HT1632::memory_limit() {
+  return ( this->commons == nmos_8commons || this->commons == pmos_8commons ) ?
+    0x40 : 0x5E;
+}
+
 bool HT1632::write_to_address( uint8_t addr, uint8_t value ) {
-  if( addr < 0 ) return false;
-  if( addr > 0x5E ) return false;
-  if( 
-    addr > 0x40 && 
-    ( this->commons == nmos_8commons || this->commons == pmos_8commons )
-  ){
-     return false;
-  }
+  if( addr >= memory_limit() ) 
+    return false;
+
   set_mode(write_mode);
   send_address( addr );
   send_data( value );
@@ -136,14 +136,9 @@ bool HT1632::write_to_address( uint8_t addr, uint8_t value ) {
 }
 
 bool HT1632::read_from_address( uint8_t addr, uint8_t *value ) {
-  if( addr < 0 ) return false;
-  if( addr > 0x5E ) return false;
-  if( 
-    addr > 0x40 && 
-    ( this->commons == nmos_8commons || this->commons == pmos_8commons )
-  ){
-     return false;
-  }
+  if( addr >= memory_limit() ) 
+    return false;
+
   set_mode(read_mode);
   send_address( addr );
   *value = read_nibble();

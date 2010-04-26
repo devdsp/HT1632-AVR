@@ -77,6 +77,8 @@ public:
     Command commons, 
     bool master = true 
   );
+  
+  uint8_t memory_limit();
 
   bool write_to_address( uint8_t addr, uint8_t value );
   bool read_from_address( uint8_t addr, uint8_t *value );  
