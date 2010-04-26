@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <stdint.h> 
 #include "MHV_io.h"
 
+#define swap(value) asm volatile("swap %0" : "=r" (value) : "0" (value));
+
 class HT1632 {
   
 public:
@@ -82,6 +84,9 @@ public:
 
   bool write_to_address( uint8_t addr, uint8_t value );
   bool read_from_address( uint8_t addr, uint8_t *value );  
+
+  bool write_buffer( uint8_t *buffer, uint8_t length, uint8_t offset = 0 );
+  bool read_buffer( uint8_t *buffer, uint8_t length, uint8_t offset = 0 );
 
   void set_mode(Mode mode);
   void send_address( uint8_t addr );

@@ -146,6 +146,43 @@ bool HT1632::read_from_address( uint8_t addr, uint8_t *value ) {
   return true;
 }
 
+bool HT1632::write_buffer( uint8_t *buffer, uint8_t length, uint8_t offset ) {
+  if( (length + offset)*2 > memory_limit() )
+    return false;
+  
+  uint8_t *pointer = buffer;  
+
+  set_mode(write_mode);
+  send_address( offset*2 );
+  
+  while( length-- ) {
+    uint8_t temp = *pointer;
+    send_data( temp );
+    swap( temp );
+    send_data( temp );
+    ++pointer; 
+  }
+}
+
+bool HT1632::read_buffer( uint8_t *buffer, uint8_t length, uint8_t offset ) {
+  if( (length + offset)*2 > memory_limit() )
+     return false;
+  
+  uint8_t *pointer = buffer;  
+
+  set_mode(write_mode);
+  send_address( offset*2 );
+  
+  while( length-- ) {
+    uint8_t temp = read_nibble();
+    swap( temp );
+    temp |= read_nibble();
+    swap( temp );
+    *pointer = temp;
+    ++pointer; 
+  }
+}
+
 void HT1632::send_address( uint8_t addr ) {
   write_bits_msb( _BV(6), addr );
 }
