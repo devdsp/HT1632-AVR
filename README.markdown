@@ -31,16 +31,16 @@ Arduino and Sure Electronics 0832 or 1624
 To run the examples on an Arduino and a Sure Electronics display; connect 
 the Arduino to the display as follows:
   
-Display Label   Arduino DIO  Sure's Connector
-     CS1             4              1
-     CS2             5              3
-     CS3             6              2
-     CS4             7              4
-      WR             8              5
-    DATA             9              7
-      RD            10              6
-     GND           gnd             11
-     +5V           +5V             12
+    | Display Label | Arduino DIO | Sure's Connector |
+    |      CS1      |      4      |        1         |
+    |      CS2      |      5      |        3         |
+    |      CS3      |      6      |        2         |
+    |      CS4      |      7      |        4         |
+    |       WR      |      8      |        5         |
+    |     DATA      |      9      |        7         |
+    |       RD      |     10      |        6         |
+    |      GND      |    gnd      |       11         |
+    |      +5V      |    +5V      |       12         |
 
 Don't forget that if you are looking at an IDC plug from the bottom, as you
 will if you are plugging in jumper cables, the rows are reversed. Just
