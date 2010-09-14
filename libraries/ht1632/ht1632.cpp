@@ -64,7 +64,8 @@ HT1632::HT1632(
   send_command((Command)commons);
   
   if( master ) {
-    send_command(master_mode);
+    send_command(master_mode); // Does nothing on HT1632C
+    send_command(clock_source_internal); // Sets master mode on HT1632C
   } else {
     send_command(slave_mode);
   }
