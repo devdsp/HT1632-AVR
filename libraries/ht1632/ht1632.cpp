@@ -77,7 +77,7 @@ HT1632::HT1632(
   
   set_mode( HT1632::write_mode );
   send_address( 0 );
-  for( uint8_t i =0; i < 0x5E; ++i ) {
+  for( uint8_t i =0; i < 0x60; ++i ) {
     send_data( 0x00 );
   }
   deselect();
@@ -122,7 +122,7 @@ void HT1632::write_bits_lsb( uint8_t finishingbit, uint8_t value ) {
 
 uint8_t HT1632::memory_limit() {
   return ( this->commons == nmos_8commons || this->commons == pmos_8commons ) ?
-    0x40 : 0x5E;
+    0x40 : 0x60;
 }
 
 bool HT1632::write_to_address( uint8_t addr, uint8_t value ) {
