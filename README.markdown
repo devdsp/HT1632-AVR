@@ -32,8 +32,8 @@ To run the examples on an Arduino and a Sure Electronics display; connect
 the Arduino to the display as follows:
   
     | Display Label | Arduino DIO | Sure's Connector |
-    |      CS1      |      4      |        1         |
-    |      CS2      |      5      |        3         |
+    |      CS1      |      4      |        3         |
+    |      CS2      |      5      |        1         |
     |      CS3      |      6      |        2         |
     |      CS4      |      7      |        4         |
     |       WR      |      8      |        5         |
